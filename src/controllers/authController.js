@@ -17,7 +17,7 @@ const login = async (req, res) => {
             return sendError(res,404,'Usuario no existe');
         }
 
-        if (!validator.isLength(password, { min: 8, max: 10 })) {
+        if (!validator.isLength(password, { min: 8})) {
             return sendError(res, 400, 'La contraseña debe tener minimo 8');
         }
 
