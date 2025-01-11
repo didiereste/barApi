@@ -1,8 +1,9 @@
 const AppDataSource = require('../config/connection');
-const jwt= require('../utils/jwt');
-const { sendSuccess, sendError } = require('../utils/responseHandler')
+const Jwt = require('../utils/jwt');
+const { sendSuccess, sendError } = require('../utils/responseHandler');
+const  bcrypt = require('bcryptjs');
 const User = require('../models/userModel');
-
+const validator = require('validator');
 
 
 const login = async (req, res) => {
@@ -16,11 +17,17 @@ const login = async (req, res) => {
             return sendError(res,404,'Usuario no existe');
         }
 
-        if(password != userExists.password){
-            return sendError(res,401,'Contraseña incorrecta');
+        if (!validator.isLength(password, { min: 8, max: 10 })) {
+            return sendError(res, 400, 'La contraseña debe tener minimo 8');
         }
 
-        const token = jwt.createToken({ id: userExists.id, username: userExists.username, role_id: userExists.role_id});
+        const isPasswordValid = await bcrypt.compare(password, userExists.password);
+        
+        if (!isPasswordValid) {
+            return sendError(res, 401, 'Contraseña incorrecta');
+        }
+
+        const token = Jwt.createToken({ id: userExists.id, username: userExists.username, role_id: userExists.role_id});
 
         return sendSuccess(res,{ token },'Inicio de sension exitoso');
 
