@@ -18,7 +18,7 @@ const login = async (req, res) => {
         }
 
         if (!validator.isLength(password, { min: 8})) {
-            return sendError(res, 400, 'La contraseña debe tener minimo 8');
+            return sendError(res, 400, 'La contraseña debe tener minimo 8 caracteres');
         }
 
         const isPasswordValid = await bcrypt.compare(password, userExists.password);

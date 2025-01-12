@@ -18,7 +18,7 @@ const createUser= async(req,res) => {
         return sendError(res,400,'El email debe de ser numerico');
     }
 
-    if(!validator.isNumeric(role_id)){
+    if(!validator.isNumeric(role_id.toString())){
         return sendError(res,400,'El rol debe de ser numerico');
     }
 
